@@ -1,11 +1,20 @@
 import { env } from "../config/env.js";
 
 export const syncEmbeddings = async (lawId) => {
-  if (!env.ragServiceUrl) {
+  // If RAG service URL is not configured, skip syncing
+  const rawUrl = `${env.ragServiceUrl || ""}`.trim();
+  if (!rawUrl || rawUrl === "-") {
     return { queued: false };
   }
 
-  const response = await fetch(`${env.ragServiceUrl}/embeddings/sync`, {
+  let baseUrl;
+  try {
+    baseUrl = new URL(rawUrl).toString().replace(/\/$/, "");
+  } catch (error) {
+    return { queued: false };
+  }
+
+  const response = await fetch(`${baseUrl}/embeddings/sync`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ law_id: lawId }),

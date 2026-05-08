@@ -32,12 +32,12 @@ const ingestHandler = async (req, res, next) => {
       rawText,
     );
     const normalizedText = normalizeText(rawText);
-    console.log(
-      "Text normalized, length:",
-      normalizedText.length,
-      "Normalized text: ",
-      normalizedText,
-    );
+    // console.log(
+    //   "Text normalized, length:",
+    //   normalizedText.length,
+    //   "Normalized text: ",
+    //   normalizedText,
+    // );
     const metadata = await extractMetadata(normalizedText);
     const sections = splitSections(normalizedText);
     console.log("Sections extracted:", sections.length, "Section:", sections);
